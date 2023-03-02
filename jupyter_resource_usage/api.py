@@ -31,8 +31,11 @@ class ApiHandler(APIHandler):
         """
         config = self.settings["jupyter_resource_usage_display_config"]
 
-        cur_process = psutil.Process()
-        all_processes = [cur_process] + cur_process.children(recursive=True)
+        if not config.report_system_usage:
+            cur_process = psutil.Process()
+            all_processes = [cur_process] + cur_process.children(recursive=True)
+        else:
+            all_processes = psutil.process_iter()  
 
         # Get memory information
         rss = 0

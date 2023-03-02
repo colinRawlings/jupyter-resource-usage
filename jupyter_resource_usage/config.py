@@ -123,6 +123,18 @@ class ResourceUseDisplay(Configurable):
     def _cpu_limit_default(self):
         return float(os.environ.get("CPU_LIMIT", 0))
 
+    report_system_usage = Bool(
+        default_value=False,
+        help="""
+        Accumulate the metrics from all processes not just the current kernel and its children.
+        
+        This defaults to False.
+        
+        The True setting makes more sense in the Docker case where oom_killer can trigger based on
+        usage of other kernels/processes.
+        """,
+    ).tag(config=True)
+
     enable_prometheus_metrics = Bool(
         default_value=True,
         help="""

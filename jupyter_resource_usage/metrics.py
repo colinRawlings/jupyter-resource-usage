@@ -30,9 +30,13 @@ class PSUtilMetricsLoader:
         if psutil is None:
             return None
         else:
-            current_process = psutil.Process()
-            all_processes = [current_process] + current_process.children(recursive=True)
-
+            
+            if not self.config.report_system_usage:
+                cur_process = psutil.Process()
+                all_processes = [cur_process] + cur_process.children(recursive=True)
+            else:
+                all_processes = psutil.process_iter()  
+            
             process_metric_value = lambda process: self.get_process_metric_value(
                 process, name, kwargs, attribute
             )
